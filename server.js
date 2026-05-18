@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const fetch = require('node-fetch');
 
 const app = express();
 app.use(cors());
@@ -21,22 +22,19 @@ app.post('/api/chat', async (req, res) => {
             })
         });
 
-        // 🛡️ PARCHE CLAVE: Capturamos primero como texto plano para que NUNCA explote por culpa de Vercel
         const textoCrudo = await response.text();
         
         try {
             const jsonParseado = JSON.parse(textoCrudo);
             res.json(jsonParseado);
-        } catch (errorParseo) {
-            // Si Vercel manda un HTML de error ("The deployment..."), se lo enviamos limpio al chat para leerlo
-            res.json({ content: textoCrudo });
+        } catch (err) {
+            res.json({ choices: [{ message: { content: textoCrudo } }] });
         }
-
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 });
 
 app.listen(3000, () => {
-    console.log("🚀 MOTORES REPARADOS: ESCUCHANDO EN PUERTO 3000");
+    console.log("🚀 TÚNEL BETH OS CORRIENDO EN EL PUERTO 3000");
 });
