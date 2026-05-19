@@ -16,17 +16,11 @@ app.post('/api/chat', async (req, res) => {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + VERCEL_TOKEN
             },
-            body: JSON.stringify({
-                model: "gpt-4o",
-                messages: req.body.messages
-            })
+            body: JSON.stringify({ model: "gpt-4o", messages: req.body.messages })
         });
-
         const textoCrudo = await response.text();
-        
         try {
-            const jsonParseado = JSON.parse(textoCrudo);
-            res.json(jsonParseado);
+            res.json(JSON.parse(textoCrudo));
         } catch (err) {
             res.json({ choices: [{ message: { content: textoCrudo } }] });
         }
@@ -35,6 +29,7 @@ app.post('/api/chat', async (req, res) => {
     }
 });
 
-app.listen(3000, () => {
-    console.log("🚀 TÚNEL BETH OS CORRIENDO EN EL PUERTO 3000");
+// Abre la puerta grande para recibir la conexión de tu computadora
+app.listen(3000, '0.0.0.0', () => {
+    console.log("🚀 MÁQUINA ENCENDIDA: ESCUCHANDO EN EL PUERTO 3000");
 });
